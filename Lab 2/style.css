@@ -1,0 +1,307 @@
+
+/* ----- CSS variables (colors, spacing, fonts) ----- */
+:root {
+	 /* Sand-themed palette */
+	 --bg-sand: #f4ead1; /* main sand background */
+	 --bg-sand-2: #efe3b8; /* subtle darker sand for gradient */
+	 --card: #ffffff;
+	 --primary: #6b4f2b; /* warm brown for headings/links */
+	 --accent: #b0894b; /* complementary gold accent */
+	 --muted: #6b7280; /* neutral gray for captions */
+	 --text-primary: #2b2b2b;
+	 --text-muted: var(--muted);
+	 --border: #e6e0cf; /* soft border matching sand */
+	 --radius: 8px;
+	 --max-width: 1000px;
+	 --gap: 1rem;
+	 --font-sans: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	 --base-font-size: 16px; /* base font size */
+}
+
+/* ------------------------------------------------------------------
+	Lab CSS Requirements (explicit sections)
+	------------------------------------------------------------------ */
+
+/* 1) Background color or image -------------------------------------------------
+	Requirement: Include a background color or image for the page.
+	Here we use a sand color and a subtle gradient.
+*/
+body {
+	 font-family: var(--font-sans);
+	 font-size: var(--base-font-size);
+	 background: linear-gradient(180deg, var(--bg-sand), var(--bg-sand-2));
+	 color: #2b2b2b; /* dark neutral text for readability */
+	 line-height: 1.5;
+	 -webkit-font-smoothing: antialiased;
+	padding: 1rem; /* page padding */
+	text-align: left; /* default text alignment (see item 5) */
+}
+
+/* 2) Text color ----------------------------------------------------------------
+	Requirement: Define text color(s) to ensure readability.
+	Use variables for primary text and muted/caption text.
+*/
+/* Apply text colors explicitly to base elements */
+body, p, li {
+	color: var(--text-primary);
+}
+
+/* 3) Font ----------------------------------------------------------------------
+	Requirement: Define font family and font-size for the site.
+	The --font-sans and --base-font-size variables above provide this.
+*/
+/* ... font already set on body above ... */
+
+/* 4) Font size -----------------------------------------------------------------
+	Requirement: Control font sizes for headings and body text.
+*/
+h1 { font-size: 2rem; color: var(--primary); }
+h2 { font-size: 1.25rem; color: var(--primary); }
+h3 { font-size: 1rem; color: var(--primary); }
+/* Body font-size set via --base-font-size applied on body */
+
+/* 5) Text alignment ------------------------------------------------------------
+	Requirement: Demonstrate text alignment. Default left aligned; use
+	helper classes to center or right-align when needed.
+*/
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+/* 6) Margins and padding ------------------------------------------------------
+	Requirement: Ensure margins and padding are defined for layout and
+	readable spacing. Examples are added for container, headings and paragraphs.
+*/
+h1, h2, h3 { margin: 0.5rem 0; }
+p { margin: 0.5rem 0 1rem 0; }
+
+/* removed duplicated .container here; the full .container block appears later */
+
+/* End of numbered requirements section */
+
+/* ----- Page wrapper / container ----- */
+.container {
+	max-width: var(--max-width);
+	margin: 0 auto;
+	background: transparent;
+	padding: 1rem;
+}
+
+/* ----- Navbar styling (class selector) ----- */
+.navbar {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+	padding: 0.5rem 0;
+	border-bottom: 2px solid var(--border);
+}
+
+.navbar a {
+	color: var(--primary);
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.navbar a:hover,
+.navbar a:focus {
+	color: var(--accent);
+	text-decoration: underline;
+}
+
+/* Demonstrate attribute selector: target images with width/height attributes */
+img[width][height] {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	border-radius: 6px;
+	box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+	margin: 0.75rem 0;
+}
+
+/* General image rule: ensures images are styled even if no width/height attrs */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+  margin: 0.75rem 0;
+}
+
+/* Headings (type selectors + descendant) */
+/* heading sizes and margins are set in the numbered requirements section */
+
+/* Paragraphs */
+/* paragraph margins and color are set in the numbered requirements section */
+
+/* Utility: subtle muted text using class */
+.muted {
+	color: var(--muted);
+	font-size: 0.9rem;
+}
+
+/* ----- Card example using ID selector (shows use of id) ----- */
+#intro-card {
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	padding: 1rem;
+	margin: 1rem 0;
+}
+
+/* ----- List styling (ol on dogbreeds.html) ----- */
+ol[type="I"] {
+	padding-left: 1.25rem;
+	margin: 0.5rem 0 1rem 0;
+}
+
+ol[type="I"] li {
+	margin: 0.35rem 0;
+}
+
+/* ----- Table styling (myPets.html) ----- */
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 1rem 0;
+	box-shadow: 0 6px 14px rgba(15,23,42,0.04);
+}
+
+th,
+td {
+	padding: 0.6rem 0.8rem;
+	border: 1px solid var(--border);
+	text-align: left;
+}
+
+th {
+	background: linear-gradient(90deg, rgba(31,111,235,0.06), rgba(245,158,11,0.03));
+	color: var(--primary);
+	font-weight: 700;
+}
+
+/* Zebra striping using :nth-child (pseudo-class) */
+tbody tr:nth-child(odd) {
+	background: #fbfdff;
+}
+
+tbody tr:hover {
+	background: #f1f5f9;
+}
+
+/* ----- Video styling ----- */
+video {
+	display: block;
+	max-width: 100%;
+	border-radius: 6px;
+	box-shadow: 0 8px 22px rgba(2,6,23,0.08);
+	margin: 0.75rem 0;
+}
+
+/* ----- Form / input examples (if used in future) ----- */
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+	width: 100%;
+	padding: 0.5rem;
+	border: 1px solid var(--border);
+	border-radius: 6px;
+	margin: 0.5rem 0;
+}
+
+/* ----- Pseudo-element example: small caption under images ----- */
+.img-caption::after {
+	content: attr(data-caption);
+	display: block;
+	font-size: 0.85rem;
+	color: var(--muted);
+	margin-top: 0.35rem;
+}
+
+/* ----- Advanced selectors examples ----- */
+/* child selector: only direct children headings in container */
+.container > h1 {
+	margin-top: 0.25rem;
+}
+
+/* adjacent sibling selector: style paragraph directly after h2 */
+h2 + p {
+	font-style: italic;
+	color: #0b1220;
+}
+
+/* descendant selector + class: style lists inside articles (if present) */
+article ul li {
+	margin: 0.25rem 0;
+}
+
+/* focus-visible for accessibility */
+a:focus-visible,
+button:focus-visible {
+	outline: 3px solid rgba(31,111,235,0.18);
+	outline-offset: 2px;
+}
+
+/* ----- Responsive layout (media queries) ----- */
+@media (min-width: 700px) {
+	body {
+		padding: 2rem;
+	}
+
+	.navbar {
+		gap: 1rem;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+	}
+}
+
+@media (min-width: 1000px) {
+	.container {
+		display: grid;
+		grid-template-columns: 1fr 320px; /* main + sidebar */
+		gap: 1.5rem;
+		align-items: start;
+	}
+
+	/* ensure images in the sidebar don't overflow */
+	.container img {
+		width: 100%;
+		height: auto;
+	}
+}
+
+/* ----- Small screen touch improvements ----- */
+@media (max-width: 420px) {
+	.navbar {
+		flex-wrap: wrap;
+	}
+
+	h1 { font-size: 1.4rem; }
+}
+
+/* ----- Small visual flourish: gradient button class ----- */
+.btn {
+	display: inline-block;
+	background: linear-gradient(90deg, var(--primary), #0ea5e9);
+	color: white;
+	padding: 0.45rem 0.9rem;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.btn:hover { filter: brightness(0.95); }
+
+/* ----- Accessibility: reduced motion ----- */
+@media (prefers-reduced-motion: reduce) {
+	* {
+		transition: none !important;
+		animation: none !important;
+	}
+}
+
+/* ---------------------------------------------
+	 End of style.css
+	 --------------------------------------------- */
