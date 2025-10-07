@@ -1,0 +1,78 @@
+/* Calculator Container */
+.calculator-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+/* Calculator Paper */
+.calculator-paper {
+  padding: 20px;
+  background-color: #424242 !important;
+  border-radius: 10px !important;
+  width: 320px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Button Grid */
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+/* Number Buttons */
+.number-button {
+  transition: transform 0.1s ease, box-shadow 0.1s ease !important;
+}
+
+.number-button:active {
+  transform: scale(0.95);
+}
+
+/* Operation Buttons */
+.operation-button {
+  transition: all 0.2s ease !important;
+}
+
+.operation-button.highlighted {
+  box-shadow: 0 0 15px rgba(255, 152, 0, 0.8) !important;
+  transform: scale(1.05);
+}
+
+.operation-button:active {
+  transform: scale(0.95);
+}
+
+/* Equals Button */
+.equals-button {
+  transition: transform 0.1s ease !important;
+}
+
+.equals-button:active {
+  transform: scale(0.95);
+}
+
+/* Clear Button */
+.clear-button {
+  transition: transform 0.1s ease !important;
+}
+
+.clear-button:active {
+  transform: scale(0.95);
+}
+
+/* Add some responsive design */
+@media (max-width: 400px) {
+  .calculator-paper {
+    width: 280px;
+    padding: 15px;
+  }
+  
+  .button-grid {
+    gap: 8px;
+  }
+}
