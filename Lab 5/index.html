@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grades Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background: #667eea;
+            color: white;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-buttons button {
+            margin: 0;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Grades Management System</h1>
+
+        <!-- Get Single Student Grade -->
+        <div class="section">
+            <h2>Get Student Grade</h2>
+            <div class="form-group">
+                <label for="searchName">Student Name:</label>
+                <input type="text" id="searchName" placeholder="Enter student name (case sensitive)">
+            </div>
+            <button onclick="getStudentGrade()">Search</button>
+            <div id="searchResult"></div>
+        </div>
+
+        <!-- View All Grades -->
+        <div class="section">
+            <h2>All Students and Grades</h2>
+            <button onclick="getAllGrades()">Refresh List</button>
+            <div id="allGradesResult"></div>
+        </div>
+
+        <!-- Add New Student -->
+        <div class="section">
+            <h2>Add New Student</h2>
+            <div class="form-group">
+                <label for="newName">Student Name:</label>
+                <input type="text" id="newName" placeholder="Enter student name">
+            </div>
+            <div class="form-group">
+                <label for="newGrade">Grade:</label>
+                <input type="number" id="newGrade" placeholder="Enter grade (0-100)" min="0" max="100" step="0.1">
+            </div>
+            <button onclick="addStudent()">Add Student</button>
+            <div id="addResult"></div>
+        </div>
+
+        <!-- Edit Student Grade -->
+        <div class="section">
+            <h2>Edit Student Grade</h2>
+            <div class="form-group">
+                <label for="editName">Student Name:</label>
+                <input type="text" id="editName" placeholder="Enter student name (case sensitive)">
+            </div>
+            <div class="form-group">
+                <label for="editGrade">New Grade:</label>
+                <input type="number" id="editGrade" placeholder="Enter new grade" min="0" max="100" step="0.1">
+            </div>
+            <button onclick="editGrade()">Update Grade</button>
+            <div id="editResult"></div>
+        </div>
+
+        <!-- Delete Student -->
+        <div class="section">
+            <h2>Delete Student</h2>
+            <div class="form-group">
+                <label for="deleteName">Student Name:</label>
+                <input type="text" id="deleteName" placeholder="Enter student name (case sensitive)">
+            </div>
+            <button class="btn-danger" onclick="deleteStudent()">Delete Student</button>
+            <div id="deleteResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // Base URL for the REST API - all requests will be sent to this server
+        const API_BASE = 'https://amhep.pythonanywhere.com';
+
+        /**
+         * Helper function to display success or error messages to the user
+         * @param {string} elementId - The ID of the HTML element where the message will be displayed
+         * @param {string} message - The message text to display
+         * @param {boolean} isError - If true, displays as error (red), otherwise success (green)
+         */
+        function showMessage(elementId, message, isError = false) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="message ${isError ? 'error' : 'success'}">${message}</div>`;
+        }
+
+        /**
+         * Helper function to encode student names for use in URIs
+         * Converts spaces to %20 and handles special characters
+         * @param {string} name - The student name to encode
+         * @returns {string} - URI-safe encoded name
+         */
+        function encodeName(name) {
+            return encodeURIComponent(name);
+        }
+
+        /**
+         * Helper function to create an HTML table from grades data
+         * Converts JSON data into a formatted table with action buttons
+         * @param {Object} data - JSON object containing student names as keys and grades as values
+         * @returns {string} - HTML string containing the complete table
+         */
+        function createGradesTable(data) {
+            // Check if data is empty
+            if (!data || Object.keys(data).length === 0) {
+                return '<div class="empty-state">No students found</div>';
+            }
+
+            // Start building the HTML table with headers
+            let html = '<table><thead><tr><th>Student Name</th><th>Grade</th><th>Actions</th></tr></thead><tbody>';
+            
+            // Loop through each student in the data object
+            for (const [name, grade] of Object.entries(data)) {
+                // Add a table row for each student with Edit and Delete buttons
+                // Note: Single quotes in names are escaped to prevent JavaScript errors
+                html += `
+                    <tr>
+                        <td>${name}</td>
+                        <td>${grade}</td>
+                        <td class="action-buttons">
+                            <button class="btn-warning" onclick="quickEdit('${name.replace(/'/g, "\\'")}', ${grade})">Edit</button>
+                            <button class="btn-danger" onclick="quickDelete('${name.replace(/'/g, "\\'")}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            // Close the table HTML
+            html += '</tbody></table>';
+            return html;
+        }
+
+        /**
+         * LAB REQUIREMENT #1: Get a single student's grade from the backend
+         * Makes a GET request to /grades/<student name>
+         * Displays the result in a table format
+         */
+        async function getStudentGrade() {
+            // Get the student name from the input field and remove extra whitespace
+            const name = document.getElementById('searchName').value.trim();
+            const resultDiv = document.getElementById('searchResult');
+            
+            // Validate that a name was entered
+            if (!name) {
+                showMessage('searchResult', 'Please enter a student name', true);
+                return;
+            }
+
+            // Show loading message while waiting for server response
+            resultDiv.innerHTML = '<div class="loading">Loading...</div>';
+
+            try {
+                // Send GET request to the server with the encoded student name in the URL
+                const response = await fetch(`${API_BASE}/grades/${encodeName(name)}`);
+                
+                // Check if the request was successful (status code 200-299)
+                if (!response.ok) {
+                    throw new Error('Student not found');
+                }
+
+                // Parse the JSON response from the server
+                const data = await response.json();
+                // Convert JSON data to HTML table
+                const html = createGradesTable(data);
+                // Display the table in the result div
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                // If any error occurs, display error message
+                showMessage('searchResult', `Error: ${error.message}`, true);
+            }
+        }
+
+        /**
+         * LAB REQUIREMENT #2: Get all students and grades from the backend
+         * Makes a GET request to /grades
+         * Displays all students in a table format
+         */
+        async function getAllGrades() {
+            const resultDiv = document.getElementById('allGradesResult');
+            // Show loading message while fetching data
+            resultDiv.innerHTML = '<div class="loading">Loading...</div>';
+
+            try {
+                // Send GET request to retrieve all grades from the server
+                const response = await fetch(`${API_BASE}/grades`);
+                
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error('Failed to fetch grades');
+                }
+
+                // Parse the JSON response containing all student data
+                const data = await response.json();
+                // Convert JSON data to HTML table
+                const html = createGradesTable(data);
+                // Display the table
+                resultDiv.innerHTML = html;
+            } catch (error) {
+                // Display error if request fails
+                showMessage('allGradesResult', `Error: ${error.message}`, true);
+            }
+        }
+
+        /**
+         * LAB REQUIREMENT #3: Create a new student and grade in the backend
+         * Makes a POST request to /grades with JSON data
+         * Refreshes the full list after adding
+         */
+        async function addStudent() {
+            // Get values from input fields
+            const name = document.getElementById('newName').value.trim();
+            const grade = parseFloat(document.getElementById('newGrade').value);
+            
+            // Validate that both fields have values
+            if (!name || isNaN(grade)) {
+                showMessage('addResult', 'Please enter both name and grade', true);
+                return;
+            }
+
+            // Validate grade is within acceptable range
+            if (grade < 0 || grade > 100) {
+                showMessage('addResult', 'Grade must be between 0 and 100', true);
+                return;
+            }
+
+            try {
+                // Send POST request with student data in JSON format
+                const response = await fetch(`${API_BASE}/grades`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'  // Required header for JSON data
+                    },
+                    body: JSON.stringify({ name: name, grade: grade })  // Convert data to JSON string
+                });
+
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error('Failed to add student');
+                }
+
+                // Parse the response from the server
+                const data = await response.json();
+                // Show success message
+                showMessage('addResult', `Successfully added ${name} with grade ${grade}`);
+                
+                // Clear the input fields after successful addition
+                document.getElementById('newName').value = '';
+                document.getElementById('newGrade').value = '';
+                
+                // Refresh the complete grades list to show the new student
+                getAllGrades();
+            } catch (error) {
+                // Display error message if adding fails
+                showMessage('addResult', `Error: ${error.message}`, true);
+            }
+        }
+
+        /**
+         * LAB REQUIREMENT #4: Edit an existing student's grade in the backend
+         * Makes a PUT request to /grades/<student name> with new grade data
+         * Refreshes the list after updating
+         */
+        async function editGrade() {
+            // Get values from input fields
+            const name = document.getElementById('editName').value.trim();
+            const grade = parseFloat(document.getElementById('editGrade').value);
+            
+            // Validate that both fields have values
+            if (!name || isNaN(grade)) {
+                showMessage('editResult', 'Please enter both name and grade', true);
+                return;
+            }
+
+            // Validate grade is within acceptable range
+            if (grade < 0 || grade > 100) {
+                showMessage('editResult', 'Grade must be between 0 and 100', true);
+                return;
+            }
+
+            try {
+                // Send PUT request with the student name in URL and new grade in JSON body
+                const response = await fetch(`${API_BASE}/grades/${encodeName(name)}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'  // Required header for JSON data
+                    },
+                    body: JSON.stringify({ grade: grade })  // Only send the new grade
+                });
+
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error('Failed to update grade');
+                }
+
+                // Parse the response from the server
+                const data = await response.json();
+                // Show success message
+                showMessage('editResult', `Successfully updated ${name}'s grade to ${grade}`);
+                
+                // Clear the input fields after successful update
+                document.getElementById('editName').value = '';
+                document.getElementById('editGrade').value = '';
+                
+                // Refresh the complete grades list to show the updated grade
+                getAllGrades();
+            } catch (error) {
+                // Display error message if update fails
+                showMessage('editResult', `Error: ${error.message}`, true);
+            }
+        }
+
+        /**
+         * LAB REQUIREMENT #5: Delete a student from the backend
+         * Makes a DELETE request to /grades/<student name>
+         * Asks for confirmation before deleting and refreshes list after
+         */
+        async function deleteStudent() {
+            // Get student name from input field
+            const name = document.getElementById('deleteName').value.trim();
+            
+            // Validate that a name was entered
+            if (!name) {
+                showMessage('deleteResult', 'Please enter a student name', true);
+                return;
+            }
+
+            // Ask user to confirm deletion (prevents accidental deletion)
+            if (!confirm(`Are you sure you want to delete ${name}?`)) {
+                return;
+            }
+
+            try {
+                // Send DELETE request with student name in URL
+                const response = await fetch(`${API_BASE}/grades/${encodeName(name)}`, {
+                    method: 'DELETE'
+                });
+
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error('Failed to delete student');
+                }
+
+                // Parse the response from the server
+                const data = await response.json();
+                // Show success message
+                showMessage('deleteResult', `Successfully deleted ${name}`);
+                
+                // Clear the input field after successful deletion
+                document.getElementById('deleteName').value = '';
+                
+                // Refresh the complete grades list to remove the deleted student
+                getAllGrades();
+            } catch (error) {
+                // Display error message if deletion fails
+                showMessage('deleteResult', `Error: ${error.message}`, true);
+            }
+        }
+
+        /**
+         * Quick edit function called from Edit buttons in the table
+         * Pre-fills the edit form with the selected student's current data
+         * @param {string} name - The student's name
+         * @param {number} currentGrade - The student's current grade
+         */
+        function quickEdit(name, currentGrade) {
+            // Fill in the edit form fields with the student's current data
+            document.getElementById('editName').value = name;
+            document.getElementById('editGrade').value = currentGrade;
+            // Scroll to the edit section so user can see the pre-filled form
+            document.getElementById('editName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        /**
+         * Quick delete function called from Delete buttons in the table
+         * Deletes a student directly from the table without using the delete form
+         * @param {string} name - The student's name to delete
+         */
+        async function quickDelete(name) {
+            // Ask user to confirm deletion
+            if (!confirm(`Are you sure you want to delete ${name}?`)) {
+                return;
+            }
+
+            try {
+                // Send DELETE request to the server
+                const response = await fetch(`${API_BASE}/grades/${encodeName(name)}`, {
+                    method: 'DELETE'
+                });
+
+                // Check if the request was successful
+                if (!response.ok) {
+                    throw new Error('Failed to delete student');
+                }
+
+                // Show success message in the grades list area
+                showMessage('allGradesResult', `Successfully deleted ${name}`);
+                
+                // Wait 1 second to let user see the success message, then refresh the list
+                setTimeout(() => getAllGrades(), 1000);
+            } catch (error) {
+                // Display error message if deletion fails
+                showMessage('allGradesResult', `Error: ${error.message}`, true);
+            }
+        }
+
+        /**
+         * Initialize the page when it loads
+         * Automatically fetches and displays all grades when user first opens the page
+         */
+        window.onload = function() {
+            getAllGrades();
+        };
+    </script>
+</body>
+</html>
